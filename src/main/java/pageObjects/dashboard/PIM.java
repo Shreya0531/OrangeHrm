@@ -7,11 +7,13 @@ public class PIM {
 
     WebDriver driver;
 
+
     public PIM(WebDriver driver) {
         this.driver = driver;
     }
 
     By pimBtn = By.xpath("//span[@class='oxd-text oxd-text--span oxd-main-menu-item--name'][normalize-space()='PIM']");
+
     By addEmpBtn = By.linkText("Add Employee");
     By firstNameTxt = By.xpath("//input[@placeholder='First Name']");
     By middleNameTxt = By.xpath("//input[@placeholder='Middle Name']");
@@ -20,12 +22,11 @@ public class PIM {
     By cancelBtn = By.xpath("//button[normalize-space()='Cancel']");
     By EmployeeIdTxt = By.xpath("//input[@class='oxd-input oxd-input--active oxd-input--error']");
     By CreateLoginCheckbox = By.xpath("//span[@class='oxd-switch-input oxd-switch-input--active --label-right']");
-    By enabledCheck = By.xpath("//label[normalize-space()='Enabled']");
-    By disableCheck = By.xpath("//label[normalize-space()='Disabled']");
-    By passwordTxt = By.xpath("//div[@class='oxd-grid-item oxd-grid-item--gutters user-password-cell']" +
-            "//div[@class='oxd-input-group oxd-input-field-bottom-space']//div//input[@type='password']");
-    By confirmPasswordTxt = By.xpath("//div[@class='oxd-grid-item oxd-grid-item--gutters']" +
-            "//div[@class='oxd-input-group oxd-input-field-bottom-space']//div//input[@type='password']");
+    By usernameTxt = By.xpath("(//input[@class = \"oxd-input oxd-input--active\"])[3]");
+    By statusEnabledCheck = By.xpath("//label[normalize-space()='Enabled']");
+    By statusDisableCheck = By.xpath("//label[normalize-space()='Disabled']");
+    By passwordTxt = By.xpath("(//input[@class = \"oxd-input oxd-input--active\"])[4]");
+    By confirmPasswordTxt = By.xpath("(//input[@class = \"oxd-input oxd-input--active\"])[5]");
     By imageUploadbtn = By.xpath("//button[@class='oxd-icon-button oxd-icon-button" +
             "--solid-main employee-image-action']");
 
@@ -63,29 +64,52 @@ public class PIM {
     }
 
     public void clickEnabledCheck() {
-        driver.findElement(enabledCheck).click();
+        driver.findElement(statusEnabledCheck).click();
     }
 
     public void clickDisableCheck() {
-        driver.findElement(disableCheck).click();
+        driver.findElement(statusDisableCheck).click();
     }
 
-    public String setPasswordTxt(String password) {
+    public void setUsernameTxt(String username) {
+        driver.findElement(usernameTxt).sendKeys(username);
+    }
+
+    public void setPasswordTxt(String password) throws InterruptedException {
+        driver.findElement(passwordTxt).click();
         driver.findElement(passwordTxt).sendKeys(password);
-        return password;
+        Thread.sleep(2000);
+        //return password;
     }
 
-    public String setConfirmPasswordTxt(String confirmPassword) {
+    public void setConfirmPasswordTxt(String confirmPassword) {
+        driver.findElement(confirmPasswordTxt).click();
         driver.findElement(confirmPasswordTxt).sendKeys(confirmPassword);
-        return confirmPassword;
+
+        //return confirmPassword;
     }
 
-    public void addEmployeeWithoutLoginDetails(String firstname, String lastname, String middlename){
+    public void addEmployeeWithoutLoginDetails(String firstname, String lastname, String middleName) {
         navigateToPimDashboard();
         clickAddEmployeeBtn();
         setFirstNameTxt(firstname);
         setMiddleNameTxt(lastname);
-        setLastNameBtn(middlename);
+        setLastNameBtn(middleName);
+        toSaveEmployee();
+        System.out.println(driver.getCurrentUrl());
+    }
+
+    public void addEmployeeWithLoginDetails(String firstname, String lastname, String middleName, String username,
+                                            String password, String confirmPassword) throws InterruptedException {
+        navigateToPimDashboard();
+        clickAddEmployeeBtn();
+        setFirstNameTxt(firstname);
+        setMiddleNameTxt(lastname);
+        setLastNameBtn(middleName);
+        clickCreateLoginCheckbox();
+        setUsernameTxt(username);
+        setPasswordTxt(password);
+        setConfirmPasswordTxt(confirmPassword);
         toSaveEmployee();
         System.out.println(driver.getCurrentUrl());
     }

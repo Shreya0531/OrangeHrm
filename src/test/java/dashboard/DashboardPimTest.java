@@ -22,11 +22,20 @@ public class DashboardPimTest extends LoginPageTest {
     @Test(priority = 2)
     public void addEmployeeWithoutLoginDetails() throws InterruptedException {
 
-        addEmp.addEmployeeWithoutLoginDetails("Shreya","G","Kris");
+        addEmp.addEmployeeWithoutLoginDetails("Shreya", "G", "Kris");
         Thread.sleep(10000);
         WebElement employeeListLink = driver.findElement(By.linkText("Employee List"));
         String actualText = employeeListLink.getText();
         Assert.assertEquals(actualText, "Employee List");
+    }
 
+    @Test(priority = 3)
+    public void addEmployeeWithLoginDetails() throws InterruptedException {
+
+        addEmp.addEmployeeWithLoginDetails("Test", "G", "Kris", "TestUser", "Test@123", "Test@123");
+        Thread.sleep(10000);
+        WebElement employeeListLink = driver.findElement(By.linkText("Employee List"));
+        String actualText = employeeListLink.getText();
+        Assert.assertEquals(actualText, "Employee List");
     }
 }
